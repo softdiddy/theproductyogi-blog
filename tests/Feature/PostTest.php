@@ -82,63 +82,75 @@ class PostTest extends TestCase
         $response->assertSessionHasErrors(['title']);
     }
 
-    /** @test */
-    public function it_updates_a_post_successfully()
-    {
-        // Create a user
-        $user = User::factory()->create();
+/** @test */
+public function it_updates_a_post_successfully()
+{
+    // Create a user
+    $user = User::factory()->create();
 
-        // Create a post
-        $post = Post::create([
-            'title' => 'Old title',
-            'body' => 'Old body content',
-            'user_id' => $user->id,
-        ]);
+    // Create a post
+    $post = Post::create([
+        'title' => 'Old title',
+        'body' => 'Old body content',
+        'user_id' => $user->id,
+    ]);
 
-        // Simulate logging in as the user
-        $this->actingAs($user);
+    // Ensure post is created
+    $this->assertNotNull($post);
 
-        // Update the post with valid data
-        $response = $this->put('/posts/' . $post->id, [
-            'title' => 'Updated title',
-            'body' => 'Updated body content',
-        ]);
+    // Simulate logging in as the user
+    $this->actingAs($user);
 
-        // Assert the post is updated in the database
-        $this->assertDatabaseHas('posts', [
-            'title' => 'Updated title',
-            'body' => 'Updated body content',
-        ]);
+    // Update the post with valid data
+    $response = $this->put('/posts/' . $post->id, [
+        'title' => 'Updated title',
+        'body' => 'Updated body content',
+    ]);
 
-        // Assert the response is a redirect (assuming redirect after update)
-        $response->assertRedirect(route('posts.index'));
-    }
+    // Refresh post instance to get updated data
+    $post->refresh();
 
-    /** @test */
-    public function it_deletes_a_post_successfully()
-    {
-        // Create a user
-        $user = User::factory()->create();
+    // Assert the post is updated in the database
+    $this->assertDatabaseHas('posts', [
+        'id' => $post->id,
+        'title' => 'Updated title',
+        'body' => 'Updated body content',
+    ]);
 
-        // Create a post
-        $post = Post::create([
-            'title' => 'Post title',
-            'body' => 'Post body content',
-            'user_id' => $user->id,
-        ]);
+    // Assert the response is a redirect (assuming redirect after update)
+    $response->assertRedirect(route('posts.index'));
+}
 
-        // Simulate logging in as the user
-        $this->actingAs($user);
 
-        // Delete the post
-        $response = $this->delete('/posts/' . $post->id);
+/** @test */
+public function it_deletes_a_post_successfully()
+{
+    // Create a user
+    $user = User::factory()->create();
 
-        // Assert the post is deleted from the database
-        $this->assertDatabaseMissing('posts', [
-            'id' => $post->id,
-        ]);
+    // Create a post
+    $post = Post::create([
+        'title' => 'Post title',
+        'body' => 'Post body content',
+        'user_id' => $user->id,
+    ]);
 
-        // Assert the response is a redirect (assuming redirect after deletion)
-        $response->assertRedirect(route('posts.index'));
-    }
+    // Ensure post is created
+    $this->assertNotNull($post);
+
+    // Simulate logging in as the user
+    $this->actingAs($user);
+
+    // Delete the post
+    $response = $this->delete('/posts/' . $post->id);
+
+    // Assert the post is deleted from the database
+    $this->assertDatabaseMissing('posts', [
+        'id' => $post->id,
+    ]);
+
+    // Assert the response is a redirect (assuming redirect after deletion)
+    $response->assertRedirect(route('posts.index'));
+}
+
 }

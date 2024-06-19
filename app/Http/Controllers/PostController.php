@@ -94,9 +94,9 @@ class PostController extends Controller
             'title' => 'required|unique:posts,title,' . $post->id . '|max:255',
             'body' => 'required',
         ]);
-
+    
         $post->update($validatedData);
-
+    
         return redirect()->route('posts.index')->with('success', 'Post updated successfully.');
     }
 
