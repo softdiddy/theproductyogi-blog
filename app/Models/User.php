@@ -29,6 +29,11 @@ class User extends Authenticatable
         'password' => 'hashed', // Ensure 'password' is casted correctly
     ];
 
+    public function isAdmin()
+    {
+        return $this->role === 'admin'; // Assuming 'role' is the attribute that defines the user's role
+    }
+
     public function posts()
     {
         return $this->hasMany(Post::class);
