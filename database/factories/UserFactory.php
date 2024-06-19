@@ -1,4 +1,5 @@
 <?php
+
 // database/factories/UserFactory.php
 
 namespace Database\Factories;
@@ -14,10 +15,10 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
-            'email' => $this->faker->unique()->safeEmail(),
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
-            'password' => bcrypt('password'), // hashed password
+            'password' => bcrypt('password'), // or use Hash::make('password')
             'remember_token' => Str::random(10),
         ];
     }

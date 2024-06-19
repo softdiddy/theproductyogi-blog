@@ -8,11 +8,19 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    public function index()
-    {
-        $posts = Post::all();
-        return view('posts.index', compact('posts'));
+    public function index(Request $request)
+{
+    $query = Post::query();
+
+    if ($request->filled('search')) {
+        $query->where('title', 'like', '%' . $request->search . '%')
+              ->orWhere('body', 'like', '%' . $request->search . '%');
     }
+
+    $posts = $query->latest()->get();
+
+    return view('posts.index', compact('posts'));
+}
 
     public function create()
     {

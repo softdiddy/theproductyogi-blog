@@ -8,7 +8,7 @@
                 <div class="card-header">Create Post</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('home.store') }}">
+                    <form method="POST" action="{{ route('posts.store') }}">
                         @csrf
 
                         <div class="form-group">

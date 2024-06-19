@@ -3,6 +3,12 @@
 @section('content')
 <div class="container">
     <div class="row d-flex justify-content-center">
+        <div class="col-md-8 bt-2">
+            <form method="GET" action="{{ route('posts.index') }}" class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
         <div class="col-md-8 postbox">
             <a href="{{ route('posts.create') }}" class="btn btn-success">Create Post</a>
         </div>
