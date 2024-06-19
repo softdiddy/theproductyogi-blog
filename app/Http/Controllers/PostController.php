@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Post;
@@ -18,17 +19,50 @@ class PostController extends Controller
         return view('posts.create');
     }
 
+    // public function store(Request $request)
+    // {
+    //     $validatedData = $request->validate([
+    //         'title' => 'required|unique:posts|max:255',
+    //         'body' => 'required',
+    //     ]);
+
+    //     // Retrieve the authenticated user
+    //     $user = Auth::user();
+
+    //     // Create a new post associated with the authenticated user
+    //     $post = new Post([
+    //         'title' => $validatedData['title'],
+    //         'body' => $validatedData['body'],
+    //     ]);
+
+    //     // Associate the post with the user
+    //     $user->posts()->save($post);
+
+    //     return redirect()->route('posts.index')->with('success', 'Post created successfully.');
+    // }
+
     public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'title' => 'required|unique:posts|max:255',
-            'body' => 'required',
-        ]);
+{
+    $validatedData = $request->validate([
+        'title' => 'required|unique:posts|max:255',
+        'body' => 'required',
+    ]);
 
-        Auth::user()->posts()->create($validatedData->all());
+    // Retrieve the authenticated user
+    $user = Auth::user();
 
-        return redirect()->route('posts.index')->with('success', 'Post created successfully.');
-    }
+    // Create a new post associated with the authenticated user
+    $post = new Post([
+        'title' => $validatedData['title'],
+        'body' => $validatedData['body'],
+        'user_id' => $user->id,
+    ]);
+
+    // Save the post
+    $post->save();
+
+    return redirect()->route('posts.index')->with('success', 'Post created successfully.');
+}
 
 
     public function show(Post $post)
@@ -40,6 +74,19 @@ class PostController extends Controller
     {
         return view('posts.edit', compact('post'));
     }
+
+    // public function update(Request $request, Post $post)
+    // {
+    //     $validatedData = $request->validate([
+    //         'title' => 'required|unique:posts,title,' . $post->id . '|max:255',
+    //         'body' => 'required',
+    //     ]);
+
+    //     $post->update($validatedData);
+
+    //     return redirect()->route('posts.index')->with('success', 'Post updated successfully.');
+    // }
+
 
     public function update(Request $request, Post $post)
     {
@@ -56,7 +103,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-
+    
         return redirect()->route('posts.index')->with('success', 'Post deleted successfully.');
     }
 }

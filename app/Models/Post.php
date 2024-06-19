@@ -10,7 +10,7 @@ class Post extends Model
     use HasFactory;
     use HasUuids;
 
-    protected $fillable = ['title', 'body'];
+    protected $fillable = ['title', 'body', 'user_id']; // Ensure 'user_id' is included
 
     public function user()
     {
