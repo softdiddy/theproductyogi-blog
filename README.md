@@ -29,8 +29,8 @@ Before you begin, ensure you have met the following requirements:
    cd theproductyogi-blog
    
 2. **Install dependencies**
-   composer install
-    npm install
+   composer install,
+    npm install,
     npm run dev
 
 ## Environment Setup
